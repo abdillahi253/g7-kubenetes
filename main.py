@@ -1,8 +1,9 @@
 import sys
+import subprocess
 import os
 import yaml
 from core.docker_manager import generate_dockerfile, build_image, push_image
-from core.k8s_manager import create_namespace, create_deployment, create_service
+from core.k8s_manager import create_namespace, create_deployment, create_service, create_networkpolicy
 from core.parser import parse_yaml, parse_args
 
 def main():
@@ -21,6 +22,7 @@ def main():
     deployment_name = f"{profile_id}-customby-g7"
     image_tag = version
     image_full = f"{deployment_name}:{image_tag}"
+    network_policy = profile_content.get('network_policy', {})
 
     # Générer le Dockerfile via Jinja2 et récupérer le chemin
     dockerfile_path = generate_dockerfile(image, version, packages)
@@ -43,12 +45,18 @@ def main():
     ns_yaml = create_namespace(namespace)
     dep_yaml = create_deployment(namespace, image_full, deployment_name)
     svc_yaml = create_service(namespace, deployment_name)
-    print(f"Manifests générés :\n- {ns_yaml}\n- {dep_yaml}\n- {svc_yaml}")
+    np_yaml = create_networkpolicy(namespace, deployment_name, network_policy)
+    print(f"Manifests générés :\n- {ns_yaml}\n- {dep_yaml}\n- {svc_yaml}\n- {np_yaml}")
 
     if args.deploy:
-        os.system(f"kubectl apply -f {ns_yaml}")
-        os.system(f"kubectl apply -f {dep_yaml}")
-        os.system(f"kubectl apply -f {svc_yaml}")
+        print("Déploiement sur le cluster Kubernetes en cours...")
+        try:
+            # Application individuelle pour garantir l'ordre (d'abord le namespace)
+            for manifest in [ns_yaml, dep_yaml, svc_yaml, np_yaml]:
+                subprocess.run(["kubectl", "apply", "-f", manifest], check=True)
+            print("Déploiement terminé avec succès.")
+        except subprocess.CalledProcessError as e:
+            print(f"Erreur lors du déploiement avec kubectl: {e}")
 
 if __name__ == "__main__":
     main()

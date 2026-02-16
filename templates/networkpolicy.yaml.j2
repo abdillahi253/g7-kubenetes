@@ -11,6 +11,6 @@ spec:
     - Ingress
     - Egress
   ingress:
-    - from: []
+{{ ingress_rules | indent(4, True) }}
   egress:
-    - to: []
+{{ egress_rules | indent(4, True) }}

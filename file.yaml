@@ -1,16 +1,11 @@
-profile_id: alpine-web-app
+profile_id: telegraf-agent
 image: alpine
-version: 3.18
+version: 3.19
 packages:
-  - curl
-  - nginx
-  - apache2
+  - telegraf
 network_policy:
-  ingress:
-    - from: []
-      ports:
-        - protocol: TCP
-          port: 80
-    
+  ingress: []
   egress:
-    - to: []
+    - ports:
+        - protocol: TCP
+          port: 443

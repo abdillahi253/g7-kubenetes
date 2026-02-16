@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf-agent-customby-g7
+  namespace: telegraf-agent-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf-agent-customby-g7
+  template:
+    metadata:
+      labels:
+        app: telegraf-agent-customby-g7
+    spec:
+      containers:
+      - name: telegraf-agent-customby-g7
+        image: telegraf-agent-customby-g7:3.19
+        ports:
+        - containerPort: 80
