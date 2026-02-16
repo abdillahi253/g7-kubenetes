@@ -1,0 +1,16 @@
+profile_id: alpine-web-app
+image: alpine
+version: 3.18
+packages:
+  - curl
+  - nginx
+  - apache2
+network_policy:
+  ingress:
+    - from: []
+      ports:
+        - protocol: TCP
+          port: 80
+    
+  egress:
+    - to: []

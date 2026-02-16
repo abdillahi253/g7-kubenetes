@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Générateur de YAML OCI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Générateur de fichier Profile YAML</h2>
+    <form id="oci-form">
+      <label for="image">Image OCI</label>
+      <select id="image" required>
+        <option value="">-- Choisir une image --</option>
+        <option value="alpine">alpine</option>
+        <option value="debian">debian</option>
+        <option value="ubuntu">ubuntu</option>
+        <option value="fedora">fedora</option>
+        <option value="centos">centos</option>
+      </select>
+
+      <div id="version-group" style="display:none;">
+        <label for="version">Version</label>
+        <select id="version" required>
+          <option value="">-- Choisir une version --</option>
+        </select>
+      </div>
+
+      <div id="packages-group" style="display:none;">
+        <label>Packages</label>
+        <div class="packages" id="packages-list">
+          <!-- Les packages seront injectés ici -->
+        </div>
+        <div style="display:flex; gap:8px; margin-top:10px; align-items:stretch;">
+          <input type="text" id="custom-package" placeholder="Ajouter un package personnalisé..." style="flex:1; height:44px; font-size:1em; border-radius:5px; border:1px solid #ccc; padding:0 8px; min-width:0; box-sizing:border-box; margin:0;">
+          <button type="button" id="add-package-btn" style="width:120px; flex-shrink:0; height:44px; font-size:1em; border-radius:5px; border:1px solid #4caf50; color:#fff; background:#4caf50; margin:0; padding:0;">Ajouter</button>
+        </div>
+      </div>
+
+      <!-- Ajouté avant le bouton Générer le YAML -->
+      <div id="networkpolicy-group" style="margin-top:18px;">
+        <label>
+          <input type="checkbox" id="enable-networkpolicy">
+          Générer une NetworkPolicy
+        </label>
+        <div id="networkpolicy-options" style="display:none; margin-top:10px;">
+          <label for="np-type">Type de règle :</label>
+          <select id="np-type">
+            <option value="">-- Choisir --</option>
+            <option value="Ingress">Entrant</option>
+            <option value="Egress">Sortant</option>
+          </select>
+          <div id="np-rule-fields" style="display:none; margin-top:10px;">
+            <div id="np-from-group" style="display:none;">
+              <label for="np-from">Depuis :</label>
+              <input type="text" id="np-from" placeholder="ex: 10.0.0.0/24, default, etc.">
+            </div>
+            <div id="np-to-group" style="display:none;">
+              <label for="np-to">Vers :</label>
+              <input type="text" id="np-to" placeholder="ex: 0.0.0.0/0, default, etc.">
+            </div>
+            <label for="np-protocol" style="margin-left:10px;">Protocole :</label>
+            <select id="np-protocol">
+              <option value="TCP">TCP</option>
+              <option value="UDP">UDP</option>
+            </select>
+            <label for="np-ports" style="margin-left:10px;">Ports :</label>
+            <input type="text" id="np-ports" placeholder="ex: 80,443">
+            <button type="button" id="add-np-rule" style="margin-left:10px;">Ajouter</button>
+          </div>
+          <div id="np-rules-list" style="margin-top:10px;"></div>
+        </div>
+      </div>
+
+      <button type="submit">Générer le YAML</button>
+    </form>
+    <div class="result" id="yaml-result" style="display:none;"></div>
+    <button id="download-btn" style="display:none;">Télécharger le YAML</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
