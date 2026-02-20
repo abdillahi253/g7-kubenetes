@@ -104,12 +104,12 @@ Generator-1.0/
 
 ## Notes
 
+- la page web pour génére le fichier profile dans le dossier `profile-maker-byweb/index.html` (optionnel).
 - Les fichiers générés sont placés dans le dossier `output/`.
 - Les templates Jinja2 sont dans `templates/`.
-- Le dossier `output/` est ignoré par git (sauf `.gitkeep`).
 
 ---
 
 ## Licence
 
-MIT (ou à adapter selon ton besoin)
+MIT - by G7
