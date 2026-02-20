@@ -1,0 +1,11 @@
+profile_id: telegraf-agent
+image: alpine
+version: 3.19
+packages:
+  - telegraf
+network_policy:
+  ingress: []
+  egress:
+    - ports:
+        - protocol: TCP
+          port: 443

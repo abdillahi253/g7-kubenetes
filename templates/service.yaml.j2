@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ deployment }}-svc
+  namespace: {{ namespace }}
+spec:
+  selector:
+    app: {{ deployment }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP

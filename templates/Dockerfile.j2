@@ -1,0 +1,3 @@
+FROM {{ image }}:{{ version }}
+
+RUN {{ install_cmd }} {{ packages|join(' ') }}
